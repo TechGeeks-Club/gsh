@@ -25,6 +25,7 @@ func parser(tokens []string) Command {
 	var command Command
 
 	command.base = tokens[0]
+	command.raw = strings.Join(tokens, " ")
 	tokens = tokens[1:]
 
 	for _, token := range tokens {
