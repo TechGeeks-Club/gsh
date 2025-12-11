@@ -6,6 +6,8 @@ import (
 )
 
 type Shell struct {
+	name       string
+	user       string
 	currentDir string
 	rawInput   string
 	command    cmd.Command
@@ -20,8 +22,15 @@ func (s *Shell) Command() cmd.Command {
 
 func NewShell(config *cfg.Config) *Shell {
 	return &Shell{
-		currentDir: "/",
+		name:       DefaultShellName,
+		user:       "user",
+		currentDir: DefaultCurrentDir,
 		env:        make(map[string]string),
 		config:     config,
 	}
+}
+
+func New() *Shell {
+	var conf *cfg.Config = cfg.NewDeafultConfig()
+	return NewShell(conf)
 }

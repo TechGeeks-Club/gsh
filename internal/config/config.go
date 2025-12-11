@@ -6,49 +6,67 @@ type Config struct {
 	Prompt    string
 	Theme     string
 	ColorMode bool
-
-	stdin  *os.File
-	stdout *os.File
-	stderr *os.File
+	s         uintptr
+	stdin     *os.File
+	stdout    *os.File
+	stderr    *os.File
 
 	HistoryFile string
 }
 
-func SetDefault[typ any](conf *Config, field *typ, val typ, def typ) {
-	if _, ok := any(val).(string); ok {
-		if any(val).(string) == "" {
-			*field = def
-		} else {
-			*field = val
-		}
+// getters
+func (cnf *Config) Stdin() *os.File {
+	return cnf.stdin
+}
+
+func (cnf *Config) Stdout() *os.File {
+	return cnf.stdout
+}
+
+func (cnf *Config) Stderr() *os.File {
+	return cnf.stderr
+}
+
+func SetDefault[typ any](field *typ, val *typ, def typ) {
+	if val != nil {
+		*field = *val
 	} else {
-		if any(val) == nil {
-			*field = def
-		} else {
-			*field = val
-		}
+		*field = def
 	}
 }
 
 func (cfg *Config) NewConfig(
-	prompt string,
-	theme string,
-	colorMode bool,
+	prompt *string,
+	theme *string,
+	colorMode *bool,
 	stdin *os.File,
 	stdout *os.File,
 	stderr *os.File,
-	historyFile string,
+	historyFile *string,
 ) {
 	// Theme
-	SetDefault(cfg, &cfg.Prompt, prompt, DefaultPrompt)
-	SetDefault(cfg, &cfg.Theme, theme, "")
-	SetDefault(cfg, &cfg.ColorMode, colorMode, true)
+	SetDefault(&cfg.Prompt, prompt, DefaultPrompt)
+	SetDefault(&cfg.Theme, theme, "")
+	SetDefault(&cfg.ColorMode, colorMode, true)
 
 	// File descriptors
-	SetDefault(cfg, &cfg.stdin, stdin, os.Stdin)
-	SetDefault(cfg, &cfg.stdout, stdout, os.Stdout)
-	SetDefault(cfg, &cfg.stderr, stderr, os.Stderr)
+	SetDefault(&cfg.stdin, &stdin, os.Stdin)
+	SetDefault(&cfg.stdout, &stdout, os.Stdout)
+	SetDefault(&cfg.stderr, &stderr, os.Stderr)
 
 	// History
-	SetDefault(cfg, &cfg.HistoryFile, historyFile, "")
+	SetDefault(&cfg.HistoryFile, historyFile, "")
+}
+
+func NewDeafultConfig() *Config {
+	return &Config{
+		Prompt:      DefaultPrompt,
+		Theme:       "",
+		ColorMode:   true,
+		stdin:       os.NewFile(DefaultStdin, "/dev/stdin"),
+		stdout:      os.NewFile(DefaultStdout, "/dev/stdout"),
+		stderr:      os.NewFile(DefaultStderr, "/dev/stderr"),
+		HistoryFile: DefaultHistoryFile,
+	}
+
 }

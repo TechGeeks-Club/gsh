@@ -1,9 +1,5 @@
 package config
 
-import (
-	"os"
-)
-
 const (
 	//  Limits
 	DefaultHistorySize = 1000
@@ -30,7 +26,7 @@ const (
 )
 
 var (
-	DefaultStdin  = os.Stdin.Fd()
-	DefaultStdout = os.Stdout.Fd()
-	DefaultStderr = os.Stderr.Fd()
+	DefaultStdin  = uintptr(0)
+	DefaultStdout = uintptr(1)
+	DefaultStderr = uintptr(2)
 )
