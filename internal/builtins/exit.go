@@ -1,7 +1,11 @@
 package builtins
 
-import "gsh/internal/command"
+import (
+	"gsh/internal/command"
+	"os"
+)
 
-func Exit(c command.Command) {
-	return
+func Exit(sh ShellContext, c command.Command) error {
+	os.Exit(0)
+	return nil
 }

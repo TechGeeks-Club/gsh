@@ -1,5 +1,9 @@
 package main
 
-func main() {
+import (
+	"gsh/internal/shell"
+)
 
+func main() {
+	shell.Run()
 }

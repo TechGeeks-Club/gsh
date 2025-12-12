@@ -5,6 +5,7 @@ import (
 	cmd "gsh/internal/command"
 )
 
-func Echo(c cmd.Command) {
-	fmt.Println(c.Raw()[5:])
+func Echo(sh ShellContext, c cmd.Command) error {
+	fmt.Print(c.Raw()[5:])
+	return nil
 }
