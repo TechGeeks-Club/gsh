@@ -35,7 +35,12 @@ func (shell *Shell) readInput() (cmd.Command, error) {
 	if err != nil {
 		return cmd.Command{}, fmt.Errorf("error reading input: %w", err)
 	}
-	shell.rawInput = cmmnd[:len(cmmnd)-1]
+	if cmmnd == "" {
+		shell.rawInput = ""
+	} else {
+		shell.rawInput = cmmnd[:len(cmmnd)-1]
+
+	}
 	shell.command = cmd.Parse(shell.rawInput)
 	shell.history = append(shell.history, cmmnd)
 
